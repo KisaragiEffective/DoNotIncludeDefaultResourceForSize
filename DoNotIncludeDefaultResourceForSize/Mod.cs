@@ -16,7 +16,7 @@ namespace DoNotIncludeDefaultResourceForSize
     {
         public override string Name => "DoNotIncludeDefaultResourceForSize";
         public override string Author => "kisaragi marine";
-        public override string Version => "0.1.1";
+        public override string Version => "0.1.4";
 
         public override void OnEngineInit()
         {
