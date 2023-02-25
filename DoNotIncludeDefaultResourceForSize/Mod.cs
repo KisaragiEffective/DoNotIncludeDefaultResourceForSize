@@ -22,7 +22,7 @@ namespace DoNotIncludeDefaultResourceForSize
         {
             var harmony = new Harmony("com.github.kisaragieffective.neos.donotincludedefaultresourceforsize");
             harmony.PatchAll();
-            Msg("Injected");
+            Debug("Injected");
         }
     }
 
@@ -63,8 +63,8 @@ namespace DoNotIncludeDefaultResourceForSize
                 return true;
             }
             
-            NeosMod.Msg("Counting.");
-            NeosMod.Msg($"Started for {i.id} ({i.Name})");
+            NeosMod.Debug("Counting.");
+            NeosMod.Debug($"Started for {i.id} ({i.Name})");
             var m = i.NeosDBManifest;
             if (m == null)
             {
@@ -74,14 +74,14 @@ namespace DoNotIncludeDefaultResourceForSize
 
             m.ForEach(x =>
             {
-                NeosMod.Msg($"neosdb:///{x.Hash} | {x.Bytes} byte");
+                NeosMod.Debug($"neosdb:///{x.Hash} | {x.Bytes} byte");
             });
 
             var recomputedSize = m.Where(a => !BuiltinFontAssetHash.Contains(a.Hash)).Sum(a => a.Bytes);
-            NeosMod.Msg($"Size (excluded built-in fonts): {recomputedSize}");
+            NeosMod.Debug($"Size (excluded built-in fonts): {recomputedSize}");
             __result = selected.ItemName + " (" + UnitFormatting.FormatBytes(recomputedSize) + ")";
 
-            NeosMod.Msg("Ended.");
+            NeosMod.Debug("Ended.");
             return false;
         }
     }
