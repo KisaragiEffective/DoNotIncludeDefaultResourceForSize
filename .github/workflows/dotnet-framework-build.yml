@@ -3,6 +3,11 @@ name: Build on .NET Framework
 on:
   pull_request:
     branches: [ "master" ]
+    paths:
+      - "**/*.cs"
+      - "**/*.csproj"
+      - "**/*.sln"
+      - ".github/workflows/dotnet-framework-build.yml"
 
 jobs:
   build:
