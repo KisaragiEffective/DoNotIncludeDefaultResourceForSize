@@ -1,0 +1,73 @@
+name: Build on .NET Framework
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    env:
+      Solution_Name: DoNotIncludeDefaultResourceForSize         # Replace with your solution name, i.e. MyWpfApp.sln.
+    # Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+    # Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
+    # Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
+      ClientInstallDestination: 'C:\Neos\app'
+      NeosModLoaderVersion: '1.12.5'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # !! .NET Framework is already installed, see https://github.com/actions/setup-dotnet/issues/296
+    # - name: Install .NET Core
+    #  uses: actions/setup-dotnet@v3
+    #  with:
+    #    dotnet-version: 6.0.x
+
+    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    # Execute all unit tests in the solution
+    # - name: Execute unit tests
+    #  run: dotnet test
+
+    # Restore the application to populate the obj folder with RuntimeIdentifiers
+    - name: Restore the application
+      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+    - name: Create destination directory
+      run: New-Item -Type Directory $env:ClientInstallDestination
+    # NOTE: 7zip is already present, see https://github.com/actions/runner-images/issues/905
+    - name: Fetch and place Neos client
+      run: |
+        $latest_version=$(Invoke-WebRequest -ErrorAction:Stop https://assets.neos.com/install/Pro/Public)
+        $temp=New-TemporaryFile | % { $_.FullName }
+        Invoke-WebRequest "https://assets.neos.com/install/Pro/Data/${latest_version}.7z" -OutFile $temp
+        7z x $temp "-o$env:ClientInstallDestination"
+        $? || { throw "7z command was failed" }.Invoke()
+        Remove-Item $temp
+        Get-ChildItem -R $env:ClientInstallDestination
+    - name: Fetch and place NeosModLoader
+      run: |
+        $nml_libs=Join-Path $env:ClientInstallDestination nml_libs
+        New-Item -Type Directory $nml_libs
+        $harmony_dll=Join-Path $nml_libs "0Harmony.dll"
+        Invoke-WebRequest "https://github.com/neos-modding-group/NeosModLoader/releases/download/${env:NeosModLoaderVersion}/0Harmony.dll" -OutFile $harmony_dll
+        $nml_dll=Join-Path $env:ClientInstallDestination Libraries NeosModLoader.dll
+        Invoke-WebRequest "https://github.com/neos-modding-group/NeosModLoader/releases/download/${env:NeosModLoaderVersion}/NeosModLoader.dll" -OutFile $nml_dll
+        # There are no signatures, skipping verification
+    - name: Build
+      run: |
+        Get-ChildItem | ? { $_.extension -eq ".sln" } | % { msbuild $_.Name /t:Build /m /p:Configuration=$env:Configuration }
+      env:
+        Configuration: ${{ matrix.configuration }}
