@@ -63,7 +63,7 @@ jobs:
         New-Item -Type Directory $nml_libs
         $harmony_dll=Join-Path $nml_libs "0Harmony.dll"
         Invoke-WebRequest "https://github.com/neos-modding-group/NeosModLoader/releases/download/${env:NeosModLoaderVersion}/0Harmony.dll" -OutFile $harmony_dll
-        $nml_dll=JoinPath $env:ClientInstallDestination Libraries NeosModLoader.dll
+        $nml_dll=Join-Path $env:ClientInstallDestination Libraries NeosModLoader.dll
         Invoke-WebRequest "https://github.com/neos-modding-group/NeosModLoader/releases/download/${env:NeosModLoaderVersion}/NeosModLoader.dll" -OutFile $nml_dll
         # There are no signatures, skipping verification
     - name: Build
