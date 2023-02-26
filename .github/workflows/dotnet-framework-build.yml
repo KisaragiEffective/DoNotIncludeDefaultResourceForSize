@@ -77,10 +77,14 @@ jobs:
     # - name: Execute unit tests
     #  run: dotnet test
 
-    # TODO: extract NeosVR client
-    # TODO: fetch NeosModLoader
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      env:
+        Configuration: ${{ matrix.configuration }}
+    # TODO: extract NeosVR client
+    # TODO: fetch NeosModLoader
+    - name: Build
+      run: msbuild *.sln /t:Build /m /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
