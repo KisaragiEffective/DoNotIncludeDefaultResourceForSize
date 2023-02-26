@@ -3,7 +3,7 @@
 
 ## What is this?
 This MOD excludes built-in font from Inventory size computation.
-This MOD requires NeosModLoader.
+This MOD requires NeosModLoader (version: `1.12.5`).
 
 ## But... why?
 Those fonts are not counted as your storage usage, so I thought these assets can be excluded safely from measurement of bytes.
