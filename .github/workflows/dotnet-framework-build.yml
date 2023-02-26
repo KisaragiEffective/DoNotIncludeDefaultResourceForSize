@@ -90,7 +90,7 @@ jobs:
         # 7-zip does not provide "portable" install method.
         New-Item 7zip -ItemType Directory
         msiexec /a 7z.msi /qb TARGETDIR=7zip
-        Get-ChildItem 7zip
+        Get-ChildItem -R 7zip
         New-Item $env:ExtractDestination -ItemType Directory
       env:
         ExtractDestination: 'C:\Neos\app'
