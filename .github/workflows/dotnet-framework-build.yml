@@ -53,7 +53,7 @@ jobs:
         $latest_version=$(Invoke-WebRequest -ErrorAction:Stop https://assets.neos.com/install/Pro/Public)
         $temp=New-TemporaryFile | % { $_.FullName }
         Invoke-WebRequest "https://assets.neos.com/install/Pro/Data/${latest_version}.7z" -OutFile $temp
-        7z x $temp -o$env:ClientInstallDestination
+        7z x $temp "-o$env:ClientInstallDestination"
         $? || { throw "7z command was failed" }.Invoke()
         Remove-Item $temp
         Get-ChildItem -R $env:ClientInstallDestination
