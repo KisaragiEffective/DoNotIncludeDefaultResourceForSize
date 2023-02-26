@@ -8,8 +8,10 @@
             "fileMatch": [
                 ".github/workflows/dotnet-framework-build.yml"
             ],
-            "matchStrings": " *NeosModLoaderVersion: '(?<currentValue>[^']+)'\\n",
-            "dataSourceTemplate": "github-releases",
+            "matchStrings": [
+                " *NeosModLoaderVersion: '(?<currentValue>[^']+)'\\n"
+            ],
+            "datasourceTemplate": "github-releases",
             "depNameTemplate": "neos-modding-group/NeosModLoader",
             "versioningTemplate": "nuget",
         }
