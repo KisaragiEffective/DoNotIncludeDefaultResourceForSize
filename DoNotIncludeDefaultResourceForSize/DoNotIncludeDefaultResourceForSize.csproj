@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
@@ -11,6 +11,10 @@
         <AssemblyName>DoNotIncludeDefaultResourceForSize</AssemblyName>
         <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <NeosPath>$(MSBuildThisFileDirectory)NeosVR</NeosPath>
+        <NeosPath Condition="Exists('C:\Program Files (x86)\Steam\steamapps\common\NeosVR\')">C:\Program Files (x86)\Steam\steamapps\common\NeosVR\</NeosPath>
+        <NeosPath Condition="Exists('C:\Neos\app\')">C:\Neos\app\</NeosPath>
+        <NeosPath Condition="Exists('$(HOME)/.steam/steam/steamapps/common/NeosVR/')">$(HOME)/.steam/steam/steamapps/common/NeosVR/</NeosPath>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,12 +41,12 @@
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
         <Reference Include="*">
-            <HintPath>/home/kisaragi/Games/NeosVR/nml_libs/0Harmony.dll</HintPath>
+            <HintPath>$(NeosPath)nml_libs/0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="*">
-            <HintPath>/home/kisaragi/Games/NeosVR/Libraries/NeosModLoader.dll</HintPath>
+            <HintPath>$(NeosPath)/Libraries/NeosModLoader.dll</HintPath>
         </Reference>
-        <Reference Include="/home/kisaragi/Games/NeosVR/Neos_Data/Managed/*.dll" />
+        <Reference Include="$(NeosPath)/Neos_Data/Managed/*.dll" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Mod.cs" />
