@@ -46,7 +46,7 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
     - name: Create destination directory
-      run: New-Item -Type Directory $env:ClientInstallDestionation
+      run: New-Item -Type Directory $env:ClientInstallDestination
     # NOTE: 7zip is already present, see https://github.com/actions/runner-images/issues/905
     - name: Fetch and place Neos client
       run: |
