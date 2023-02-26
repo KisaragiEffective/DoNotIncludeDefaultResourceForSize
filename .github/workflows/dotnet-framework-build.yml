@@ -3,6 +3,10 @@ name: Build on .NET Framework
 on:
   pull_request:
     branches: [ "master" ]
+    paths:
+      - "**/*.cs"
+      - "*.csproj"
+      - "*.sln"
 
 jobs:
   build:
