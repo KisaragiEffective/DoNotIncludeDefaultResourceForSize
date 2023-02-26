@@ -45,6 +45,8 @@ jobs:
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
+    - name: Create destination directory
+      run: New-Item -Type Directory $env:ClientInstallDestionation
     # NOTE: 7zip is already present, see https://github.com/actions/runner-images/issues/905
     - name: Fetch and place Neos client
       run: |
