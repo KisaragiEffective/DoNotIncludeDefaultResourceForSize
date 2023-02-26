@@ -59,7 +59,7 @@ jobs:
         Get-ChildItem -R $env:ClientInstallDestination
     - name: Fetch and place NeosModLoader
       run: |
-        $nml_libs=JoinPath $env:ClientInstallDestination nml_libs
+        $nml_libs=Join-Path $env:ClientInstallDestination nml_libs
         New-Item -Type Directory $nml_libs
         $harmony_dll=JoinPath $nml_libs "0Harmony.dll"
         Invoke-WebRequest "https://github.com/neos-modding-group/NeosModLoader/releases/download/${env:NeosModLoaderVersion}/0Harmony.dll" -OutFile $harmony_dll
