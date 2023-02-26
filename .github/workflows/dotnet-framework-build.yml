@@ -5,8 +5,9 @@ on:
     branches: [ "master" ]
     paths:
       - "**/*.cs"
-      - "*.csproj"
-      - "*.sln"
+      - "**/*.csproj"
+      - "**/*.sln"
+      - ".github/workflows/dotnet-framework-build.yml"
 
 jobs:
   build:
