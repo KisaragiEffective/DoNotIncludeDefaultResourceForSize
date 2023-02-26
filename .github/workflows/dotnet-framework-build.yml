@@ -85,6 +85,7 @@ jobs:
     # TODO: extract NeosVR client
     # TODO: fetch NeosModLoader
     - name: Build
-      run: msbuild *.sln /t:Build /m /p:Configuration=$env:Configuration
+      run: |
+        Get-ChildItem | ? { $_.extension -eq ".sln" } | % { msbuild $_.Name /t:Build /m /p:Configuration=$env:Configuration }
       env:
         Configuration: ${{ matrix.configuration }}
