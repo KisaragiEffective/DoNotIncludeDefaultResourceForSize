@@ -8,9 +8,13 @@ on:
       - "**/*.csproj"
       - "**/*.sln"
       - ".github/workflows/dotnet-framework-build.yml"
-
+  push:
+    tags:
+      - 'v*'
 jobs:
   build:
+    permissions:
+      contents: write
     strategy:
       matrix:
         configuration: [Debug, Release]
@@ -76,3 +80,38 @@ jobs:
         Get-ChildItem | ? { $_.extension -eq ".sln" } | % { msbuild $_.Name /t:Build /m /p:Configuration=$env:Configuration }
       env:
         Configuration: ${{ matrix.configuration }}
+    - name: Compute Hash
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        function Handle($path) {
+          if (-not [System.IO.File]::Exists($path)) {
+            return
+          }
+          
+          $Bytes = [System.IO.File]::ReadAllBytes($path)
+          Add-Type -AssemblyName System.Security
+          $SHA = New-Object System.Security.Cryptography.SHA512CryptoServiceProvider
+          $HashBytes = $SHA.ComputeHash($Bytes)
+          $SHA.Dispose()
+          $HashString = ""
+          foreach( $HashByte in $HashBytes ){
+            $HashString += $HashByte.ToString("x2")
+          }
+          
+          $HashFileDestination = dir $path | % { $_.FullName + ".sha512sum" }
+          $OriginalFileName = dir $path | % { $_.Name }
+          Write-Output "$HashString  $OriginalFileName" | Set-Content -Encoding UTF8 $HashFileDestination
+        }
+        
+        Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
+        Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
+      with:
+        # only warn when non-existent, no error
+        files: |
+          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
+          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
+          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll.sha512sum
+          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb.sha512sum
