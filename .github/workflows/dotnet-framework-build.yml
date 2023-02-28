@@ -141,5 +141,5 @@ jobs:
         files: |
           ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.dll
           ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.pdb
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.dll.sha512sum
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.pdb.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.dll-${{ matrix.configuration }}.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.pdb-${{ matrix.configuration }}.sha512sum
