@@ -83,7 +83,9 @@ jobs:
     - name: Compute Hash
       if: github.ref_type == 'tag'
       run: |
+        Write-Output $env:GITHUB_WORKSPACE
         function Handle($path) {
+          $path = Join-Path $env:GITHUB_WORKSPACE $path
           if (-not [System.IO.File]::Exists($path)) {
             return
           }
