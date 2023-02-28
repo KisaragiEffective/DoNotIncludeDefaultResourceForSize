@@ -85,10 +85,13 @@ jobs:
       run: |
         Write-Output $env:GITHUB_WORKSPACE
         function Handle($path) {
-          $path = Join-Path $env:GITHUB_WORKSPACE $path
+          $path = Join-Path $env:GITHUB_WORKSPACE $env:Solution_Name $path
           if (-not [System.IO.File]::Exists($path)) {
+            Write-Output "No such $path"
             return
           }
+          
+          Write-Output "Hit: $path"
           
           $Bytes = [System.IO.File]::ReadAllBytes($path)
           Add-Type -AssemblyName System.Security
@@ -117,7 +120,7 @@ jobs:
         tag_name: ${{ env.RELEASE_VERSION }}
         # only warn when non-existent, no error
         files: |
-          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
-          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
-          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll.sha512sum
-          obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb.sha512sum
+          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
+          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
+          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll.sha512sum
+          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb.sha512sum
