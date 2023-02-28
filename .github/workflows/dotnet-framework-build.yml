@@ -120,7 +120,7 @@ jobs:
         )
         $BasePath=Join-Path obj ${{ matrix.configuration }}
         foreach ($File in $Files) {
-          $FilePath=$(Join-Path $BasePath $File)
+          $FilePath=$(Join-Path ${{ env.Solution_Name }} $BasePath $File)
           $Base=dir $FilePath | % { $_.BaseName }
           $Ext=dir $FilePath | % { $_.Extension }
           $NewFileName=$Base + "-${{ matrix.configuration }}" + $Ext
