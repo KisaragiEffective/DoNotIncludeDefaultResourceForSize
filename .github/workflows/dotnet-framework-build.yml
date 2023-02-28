@@ -108,8 +108,8 @@ jobs:
           Write-Output "$HashString  $OriginalFileName" | Set-Content -Encoding UTF8 $HashFileDestination
         }
         
-        Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
-        Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
+        Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.dll)
+        Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.pdb)
     - name: Get current tag
       if: github.ref_type == 'tag'
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -120,7 +120,7 @@ jobs:
         tag_name: ${{ env.RELEASE_VERSION }}
         # only warn when non-existent, no error
         files: |
-          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
-          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
-          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll.sha512sum
-          ${{ github.workspace }}/${{ env.Solution_Name }}/obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.dll
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.pdb
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.dll.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.pdb.sha512sum
