@@ -81,7 +81,7 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
     - name: Compute Hash
-      if: github.ref_type == "tag"
+      if: github.ref_type == 'tag'
       run: |
         function Handle($path) {
           if (-not [System.IO.File]::Exists($path)) {
@@ -106,11 +106,11 @@ jobs:
         Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.dll
         Handle obj/${{ matrix.configuration }}/DoNotIncludeDefaultResourceForSize.pdb
     - name: Get current tag
-      if: github.ref_type == "tag"
+      if: github.ref_type == 'tag'
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - name: Release
       uses: softprops/action-gh-release@v1
-      if: github.ref_type == "tag"
+      if: github.ref_type == 'tag'
       with:
         tag_name: ${{ env.RELEASE_VERSION }}
         # only warn when non-existent, no error
