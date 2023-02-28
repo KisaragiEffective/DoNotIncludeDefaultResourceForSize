@@ -110,6 +110,24 @@ jobs:
         
         Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.dll)
         Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.pdb)
+    - name: Restructure path
+      run: |
+        $Files=@(
+          "DoNotIncludeDefaultResourceForSize.dll",
+          "DoNotIncludeDefaultResourceForSize.dll.sha512sum",
+          "DoNotIncludeDefaultResourceForSize.pdb",
+          "DoNotIncludeDefaultResourceForSize.pdb.sha512sum"
+        )
+        $BasePath=Join-Path obj ${{ matrix.configuration }}
+        foreach ($File in $Files) {
+          $FilePath=$(Join-Path $BasePath $File)
+          $Base=dir $FilePath | % { $_.BaseName }
+          $Ext=dir $FilePath | % { $_.Extension }
+          $NewFileName=$Base + "-${{ matrix.configuration }}" + $Ext
+          Move-Item $(Join-Path $BasePath $File) $(Join-Path $BasePath $NewFileName)
+        }
+        Move-Item $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.dll) $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize-${{matrix.configuration}}.dll)
+        
     - name: Get current tag
       if: github.ref_type == 'tag'
       run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
@@ -120,7 +138,7 @@ jobs:
         tag_name: ${{ env.RELEASE_VERSION }}
         # only warn when non-existent, no error
         files: |
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.dll
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.pdb
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.dll.sha512sum
-          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize.pdb.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.dll
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.pdb
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.dll.sha512sum
+          ${{ github.workspace }}\${{ env.Solution_Name }}\obj\${{ matrix.configuration }}\DoNotIncludeDefaultResourceForSize-${{ matrix.configuration }}.pdb.sha512sum
