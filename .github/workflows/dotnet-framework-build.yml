@@ -118,13 +118,16 @@ jobs:
           "DoNotIncludeDefaultResourceForSize.pdb",
           "DoNotIncludeDefaultResourceForSize.pdb.sha512sum"
         )
-        $BasePath=Join-Path obj ${{ matrix.configuration }}
+        $BasePath=Join-Path $env:GITHUB_WORKSPACE $env:Solution_Name obj ${{ matrix.configuration }}
         foreach ($File in $Files) {
-          $FilePath=$(Join-Path $env:GITHUB_WORKSPACE $env:Solution_Name $BasePath $File)
+          $FilePath=$(Join-Path $BasePath $File)
           $Base=dir $FilePath | % { $_.BaseName }
           $Ext=dir $FilePath | % { $_.Extension }
           $NewFileName=$Base + "-${{ matrix.configuration }}" + $Ext
-          Move-Item $(Join-Path $BasePath $File) $(Join-Path $BasePath $NewFileName)
+          $SourceFile=Join-Path $BasePath $File
+          $DestFile=Join-Path $BasePath $NewFileName
+          echo "$SourceFile -> $DestFile"
+          Move-Item $SourceFile $DestFile
         }
         Move-Item $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.dll) $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize-${{matrix.configuration}}.dll)
         
