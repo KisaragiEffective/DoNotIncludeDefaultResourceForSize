@@ -111,6 +111,7 @@ jobs:
         Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.dll)
         Handle $(Join-Path obj ${{ matrix.configuration }} DoNotIncludeDefaultResourceForSize.pdb)
     - name: Restructure path
+      if: github.ref_type == 'tag'
       run: |
         $Files=@(
           "DoNotIncludeDefaultResourceForSize.dll",
