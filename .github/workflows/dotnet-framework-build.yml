@@ -28,7 +28,7 @@ jobs:
     # Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
     # Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
       ClientInstallDestination: 'C:\Neos\app'
-      NeosModLoaderVersion: '1.12.5'
+      NeosModLoaderVersion: '1.12.6'
     steps:
     - name: Checkout
       uses: actions/checkout@v3
