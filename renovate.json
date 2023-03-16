@@ -13,7 +13,7 @@
             ],
             "datasourceTemplate": "github-releases",
             "depNameTemplate": "neos-modding-group/NeosModLoader",
-            "versioningTemplate": "nuget",
+            "versioningTemplate": "nuget"
         }
     ]
 }
